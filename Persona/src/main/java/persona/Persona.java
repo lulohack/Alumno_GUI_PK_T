@@ -4,6 +4,8 @@
  */
 package persona;
 
+import exceptions.ApellidoNullException;
+import exceptions.ApellidoVacioException;
 import exceptions.NombreNullException;
 import exceptions.NombreVacioException;
 import exceptions.PersonaException;
@@ -51,8 +53,8 @@ public class Persona {
         return nombre;
     }
 
-    //public void setNombre(String nombre) throws NombreNullException, NombreVacioException {
-    public void setNombre(String nombre) throws PersonaException {
+    //public void setNombre(String nombre) throws PersonaException {
+    public void setNombre(String nombre) throws NombreNullException, NombreVacioException {
         if (nombre==null) {
             throw new NombreNullException("El nombre es nulo");
         }
@@ -67,8 +69,15 @@ public class Persona {
         return apellido;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+    public void setApellido(String apellido) throws ApellidoNullException, ApellidoVacioException {
+        if (apellido==null) {
+            throw new ApellidoNullException("El apellido es nulo");
+        }
+        String apellidoTrim = apellido.trim();
+        if (apellidoTrim.length()==0) {
+            throw new ApellidoVacioException("El apellido no tiene contenido");
+        }
+        this.apellido = apellidoTrim;
     }
     
     public String getFullName() {

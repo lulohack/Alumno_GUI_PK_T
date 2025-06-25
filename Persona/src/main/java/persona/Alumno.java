@@ -4,7 +4,12 @@
  */
 package persona;
 
+import exceptions.EstadoException;
+import exceptions.MateriasAprobadasException;
+import exceptions.MateriasAprobadasNullException;
 import exceptions.PersonaException;
+import exceptions.PromedioException;
+import exceptions.PromedioNullException;
 import java.time.LocalDate;
 
 /**
@@ -32,31 +37,40 @@ public class Alumno extends Persona {
         return estado;
     }
 
-    public void setEstado(char estado) {
+    public void setEstado(char estado) throws EstadoException {
+        if (estado == 'A' || estado == 'B' || estado == 'M') {
         this.estado = estado;
+    } else {
+        throw new EstadoException("Estado inválido. Use A, B o M.");
+    }
     }
 
     public Double getPromedio() {
         return promedio;
     }
 
-    public void setPromedio(Double promedio) throws PersonaException{
-        if (promedio==null || promedio < 0 || promedio > 10.0) {
-            throw new PersonaException("El promedio "+promedio+" es inválido, inserte valores entre 0 y 10");
+    public void setPromedio(Double promedio) throws PromedioException {
+        if (promedio==null) {
+            throw new PromedioNullException("El promedio "+promedio+" no puede ser nulo");
+        }
+        if (promedio < 0 || promedio > 10 ) {
+            throw new PromedioException("El promedio "+promedio+" es inválido, inserte valores entre 0 y 10");
         }
         this.promedio = promedio;
-        
     }
 
     public Integer getMatApr() {
         return MatApr;
     }
 
-    public void setMatApr(Integer MatAprob) throws PersonaException {
-        if (MatAprob==null || MatAprob < 0 || MatAprob > 30) {
-            throw new PersonaException("La cantidad de materias aprobadas "+MatAprob+" es inválido para la carrera");
+    public void setMatApr(Integer MatApr) throws MateriasAprobadasException {
+        if (MatApr==null) {
+            throw new MateriasAprobadasNullException("La cantidad de materias aprobadas "+MatApr+" no puede ser nulo");
         }
-        this.MatApr = MatAprob;
+        if (MatApr < 0 || MatApr > 30) {
+            throw new MateriasAprobadasException("La cantidad de materias aprobadas "+MatApr+" es inválido para la carrera");
+        }
+        this.MatApr = MatApr;
     }
 
     public LocalDate getFecIng() {

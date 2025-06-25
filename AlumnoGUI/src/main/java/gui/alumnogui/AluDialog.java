@@ -220,13 +220,14 @@ public class AluDialog extends javax.swing.JDialog {
                 
                 alu.setPromedio(Double.valueOf(promedioTextField.getText()));
                 alu.setMatApr(Integer.valueOf(matAprTextField.getText()));
-            //  alu.setEstado(Character.valueOf(estadoTextField.getText()));
+            
                 
                 int year2 = fecIngDateChooser.getCalendar().get(Calendar.YEAR);
                 int month2 = fecIngDateChooser.getCalendar().get(Calendar.MONTH)+1;
                 int dayOfMonth2 = fecIngDateChooser.getCalendar().get(Calendar.DAY_OF_MONTH);
-                alu.setFecIng(LocalDate.of(year, month, dayOfMonth));
+                alu.setFecIng(LocalDate.of(year2, month2, dayOfMonth2));
                 
+            //  alu.setEstado(Character.valueOf(estadoTextField.getText()));
                 
                 
                 
@@ -334,6 +335,11 @@ public class AluDialog extends javax.swing.JDialog {
         int year = alu.getFecNac().getYear();
         int month = alu.getFecNac().getMonthValue()-1;
         int day = alu.getFecNac().getDayOfMonth();
+        
+        int year2 = alu.getFecNac().getYear();
+        int month2 = alu.getFecNac().getMonthValue()-1;
+        int day2 = alu.getFecNac().getDayOfMonth();
+        
         Calendar calendar = new GregorianCalendar(year, month, day);
         
         fecNacDateChooser.setCalendar(calendar);

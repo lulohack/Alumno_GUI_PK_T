@@ -63,7 +63,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
         modificarButton = new javax.swing.JButton();
         modificarButton1 = new javax.swing.JButton();
         consultarButton = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        incluirCheckBox = new javax.swing.JCheckBox();
         txtPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         fullpathTextField = new javax.swing.JTextField();
@@ -122,7 +122,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox1.setText("Incluir Eliminados");
+        incluirCheckBox.setText("Incluir Eliminados");
 
         txtPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -248,7 +248,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(incluirCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -281,7 +281,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(sqlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jCheckBox1)
+                .addComponent(incluirCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -351,7 +351,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
     private void modificarButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarButton1ActionPerformed
         // Mensaje de confirmación
-        //JOptionPane.showConfirmDialog(repoComboBox, evt, title, WIDTH, HEIGHT)
+        //JOptionPane.showConfirmDialog(repoComboBox, evt, title, WIDTH, HEIGHT);
         
         int selectedRow = alumnosTable.getSelectedRow();
         Integer dniAlu = alumnos.get(selectedRow).getDni();
@@ -382,7 +382,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
         aluDialog.setVisible(true);
         
         
-
+        
     }//GEN-LAST:event_modificarButtonActionPerformed
 
     private void consultarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarButtonActionPerformed
@@ -444,7 +444,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
     private javax.swing.JButton consultarButton;
     private javax.swing.JButton crearButton;
     private javax.swing.JTextField fullpathTextField;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox incluirCheckBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

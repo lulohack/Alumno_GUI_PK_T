@@ -4,10 +4,12 @@
  */
 package dao;
 
+import exceptions.EstadoException;
 import exceptions.PersonaException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,7 +96,11 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
     public void delete(Integer dni) throws DAOException {
         // Baja lógica
         Alumno alu = read(dni);
-        alu.setEstado('B');
+        try {
+            alu.setEstado('B');
+        } catch (EstadoException ex) {
+            Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
+        }
         update(alu);
     }
 
@@ -121,7 +127,16 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
 
     @Override
     public List<Alumno> findAll(boolean includeDeleted) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List <Alumno> alumnos = new ArrayList <>();
+        Alumno alu = new Alumno();
+        try {
+            alu.setDni(1);
+            alu.setNombre("Juan");
+            alumnos.add(alu);
+        } catch (PersonaException ex) {
+            Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return alumnos;
     }
 
     @Override

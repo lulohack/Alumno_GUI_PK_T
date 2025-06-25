@@ -1,6 +1,13 @@
+exceptions\PersonaException.class
+exceptions\ApellidoVacioException.class
+persona\Persona.class
 exceptions\PersonaDniException.class
 persona\Alumno.class
+exceptions\PromedioNullException.class
+exceptions\EstadoException.class
 exceptions\NombreVacioException.class
-exceptions\PersonaException.class
-persona\Persona.class
+exceptions\MateriasAprobadasNullException.class
+exceptions\MateriasAprobadasException.class
 exceptions\NombreNullException.class
+exceptions\PromedioException.class
+exceptions\ApellidoNullException.class

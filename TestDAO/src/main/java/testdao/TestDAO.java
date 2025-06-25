@@ -45,8 +45,11 @@ public class TestDAO {
             Map<String, String> config = new HashMap<>();
             // config.put(DAOFactory.TIPO_DAO, "TIPO_DAO_TXT");
             // config.put(DAOFactory.FULLPATH, "alumnos.txt");
-
+            
+            config.put(DAOFactory.TIPO_DAO, "TIPO_DAO_TXT");
+            
             config.put(DAOFactory.TIPO_DAO, "TIPO_DAO_SQL");
+            
             config.put(DAOFactory.URL_SQL, url);
             
             //config.put(DAOFactory.FULLPATH, fulllpath);

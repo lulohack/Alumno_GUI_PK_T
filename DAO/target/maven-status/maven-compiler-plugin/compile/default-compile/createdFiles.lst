@@ -5,4 +5,3 @@ dao\DAOException.class
 dao\DAO.class
 utils\DateUtils.class
 dao\DAOFactoryException.class
-.netbeans_automatic_build

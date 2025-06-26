@@ -41,7 +41,7 @@ public class Alumno extends Persona {
         if (estado == 'A' || estado == 'B' || estado == 'M') {
         this.estado = estado;
     } else {
-        throw new EstadoException("Estado inválido. Use A, B o M.");
+        throw new EstadoException("Estado inválido, valores aceptados A, B o M.");
     }
     }
 
@@ -65,10 +65,10 @@ public class Alumno extends Persona {
 
     public void setMatApr(Integer MatApr) throws MateriasAprobadasException {
         if (MatApr==null) {
-            throw new MateriasAprobadasNullException("La cantidad de materias aprobadas "+MatApr+" no puede ser nulo");
+            throw new MateriasAprobadasNullException("La cantidad de materias aprobadas no pueden ser "+MatApr);
         }
         if (MatApr < 0 || MatApr > 30) {
-            throw new MateriasAprobadasException("La cantidad de materias aprobadas "+MatApr+" es inválido para la carrera");
+            throw new MateriasAprobadasException("La cantidad de materias aprobadas: "+MatApr+" es inválido para la carrera");
         }
         this.MatApr = MatApr;
     }
@@ -81,8 +81,6 @@ public class Alumno extends Persona {
         this.fecIng = fecIng;
     }
 
-    
-    
     @Override
     public String toString() {
         return super.toString() + String.format("", null, null); 
@@ -106,5 +104,5 @@ public class Alumno extends Persona {
         
         return alumno;
     }
-
+    
 }

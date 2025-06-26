@@ -226,8 +226,11 @@ public class AluDialog extends javax.swing.JDialog {
                 int month2 = fecIngDateChooser.getCalendar().get(Calendar.MONTH)+1;
                 int dayOfMonth2 = fecIngDateChooser.getCalendar().get(Calendar.DAY_OF_MONTH);
                 alu.setFecIng(LocalDate.of(year2, month2, dayOfMonth2));
-                
-            //  alu.setEstado(Character.valueOf(estadoTextField.getText()));
+                //sugerido por chatgpt
+                char estado = estadoTextField.getText().charAt(0);
+                alu.setEstado(estado);
+                //
+                //alu.setEstado(Character.valueOf(estadoTextField.getText()));
                 
                 
                 
@@ -287,11 +290,11 @@ public class AluDialog extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(AluDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+           
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AluDialog dialog = new AluDialog(new javax.swing.JFrame(), true, null, null);
+                AluDialog dialog = new AluDialog(new javax.swing.JFrame(), true,null,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -336,13 +339,16 @@ public class AluDialog extends javax.swing.JDialog {
         int month = alu.getFecNac().getMonthValue()-1;
         int day = alu.getFecNac().getDayOfMonth();
         
-        int year2 = alu.getFecNac().getYear();
-        int month2 = alu.getFecNac().getMonthValue()-1;
-        int day2 = alu.getFecNac().getDayOfMonth();
+        int year2 = alu.getFecIng().getYear();
+        int month2 = alu.getFecIng().getMonthValue()-1;
+        int day2 = alu.getFecIng().getDayOfMonth();
         
         Calendar calendar = new GregorianCalendar(year, month, day);
+        Calendar calendar2 = new GregorianCalendar(year2, month2, day2);
+        
         
         fecNacDateChooser.setCalendar(calendar);
+        fecIngDateChooser.setCalendar(calendar2);
     }
     
 

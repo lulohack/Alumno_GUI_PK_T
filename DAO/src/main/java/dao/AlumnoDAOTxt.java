@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persona.Alumno;
+import static persona.Alumno.str2Alu;
 import persona.Persona;
 
 /**
@@ -52,6 +53,28 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
     @Override
     public Alumno read(Integer dni) throws DAOException {
         try {
+            /*
+            raf.seek(0);
+            String lineaAlu;
+            Integer dniAlu;
+            while ((lineaAlu = raf.readLine())!=null) {
+                dniAlu = Integer.valueOf(lineaAlu.substirng(0,8));
+                if (dniAlu.equals(dni) ) {
+                    return AlumnoUtils.str2Alu(lineaAlu);
+                }
+            }
+            } catch (IOException ex) {
+            Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error de E/S ("+ex.getMessage()+")");
+            } catch (PersonaException ex) {
+            Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al instanciar el Alumno ("+ex.getMessage()+")");
+            }
+
+            return null;
+            }
+            */
+            
             raf.seek(0);
             String lineaAlu;
             String[] camposAlu;
@@ -75,6 +98,25 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
     @Override
     public void update(Alumno alu) throws DAOException {
         try {
+            /*
+            long filePointer=0;
+            raf.seek(filePointer);
+            String lineaAlu;
+            Integer dniAlu;
+            while ((lineaAlu = raf.readLine())!=null) {
+                dniAlu = Integer.valueOf(lineaAlu.substirng(0,8));
+                if (dniAlu.equals(alu.getDni) ) {
+                    raf.seek(filePointer);
+                    raf.writeBytes(alu.toString());;
+                    return;
+                }
+                filePointer = raf.getFilePointer();
+            } catch (IOException ex) {
+            Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error de E/S ("+ex.getMessage()+")");
+            }
+            */
+
             raf.seek(0);
             String lineaAlu;
             String[] camposAlu;
@@ -83,8 +125,10 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
                 if (Integer.valueOf(camposAlu[0]).equals(alu.getDni()) ) {
                     // lo encontré
                     // habría que reposicionarse (ver el uso de raf.getFilePointer())
+                    // raf.seek(filePointer);
                     raf.writeBytes(alu.toString());
                 }
+                //filePointer = raf.getFilePointer();
             }
         } catch (IOException ex) {
             Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,6 +152,18 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
     public boolean exist(Integer dni) throws DAOException {
         
         try {
+            /*
+            raf.seek(0);
+            String lineaAlu;
+            Integer dniAlu;
+            while ((lineaAlu = raf.readLine())!=null) {
+                dniAlu = Integer.valueOf(lineaAlu.substring(0,8));
+                if (dniAlu.equals(dni) ) {
+                    return true;
+                }
+            }
+            */
+            
             raf.seek(0);
             String lineaAlu;
             String[] camposAlu;
@@ -121,27 +177,40 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
             Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException("Error de E/S ("+ex.getMessage()+")");
         }
-        
         return false;
     }
 
     @Override
     public List<Alumno> findAll(boolean includeDeleted) throws DAOException {
         List <Alumno> alumnos = new ArrayList <>();
-        Alumno alu = new Alumno();
         try {
-            alu.setDni(1);
-            alu.setNombre("Juan");
-            alumnos.add(alu);
-        } catch (PersonaException ex) {
-            Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            raf.seek(0);
+            String lineaAlu;
+                while ((lineaAlu = raf.readLine()) != null){
+                    //Alumno alumno = str2Alu(lineaAlu);
+                    Alumno alumno = str2Alu(lineaAlu.split(","));
+                    if (alumno.getEstado()== 'A'){
+                        alumnos.add(alumno);
+                    }
+                }
+                
+                /*
+                Alumno alu = str2Alu(new String[] {"1", "Juan", "Perez", "21/05/1950","5.0","20","14/02/1999","A"});
+                alumnos.add(alu);*/
+            } catch (IOException | PersonaException ex) {
+                Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
+            }
         return alumnos;
     }
 
     @Override
     public void close() throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        try {
+            raf.close();
+        } catch (IOException ex) {
+            Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("No se pudo cerrar el archivo.");
+        }
+        }
     
 }

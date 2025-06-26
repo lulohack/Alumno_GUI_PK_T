@@ -90,18 +90,31 @@ public class Alumno extends Persona {
 
         int index = 0;
         Alumno alumno = new Alumno();
+        
         alumno.setDni(Integer.valueOf(camposAlu[index++]));
         alumno.setNombre(camposAlu[index++]);
-        
         alumno.setApellido(camposAlu[index++]);
         
-        String[] fecNacStr = camposAlu[index++].split("/"); // por ej: "23/05/2025"
-        int year = Integer.valueOf(fecNacStr[2]);
-        int month = Integer.valueOf(fecNacStr[1]);
-        int day = Integer.valueOf(fecNacStr[0]);
+        String[] fecNacStr = camposAlu[index++].split("/");
+        int year = Integer.parseInt(fecNacStr[2]);
+        int month = Integer.parseInt(fecNacStr[1]);
+        int day = Integer.parseInt(fecNacStr[0]);
         LocalDate fecNac = LocalDate.of(year,  month, day);
         alumno.setFecNac(fecNac);
         
+        alumno.setPromedio(Double.valueOf(camposAlu[index++]));
+        alumno.setMatApr(Integer.valueOf(camposAlu[index++]));
+        
+        String[] fecIngStr = camposAlu[index++].split("/");
+        int year2 = Integer.parseInt(fecIngStr[2]);
+        int month2 = Integer.parseInt(fecIngStr[1]);
+        int day2 = Integer.parseInt(fecIngStr[0]);
+        LocalDate fecIng = LocalDate.of(year2,  month2, day2);
+        alumno.setFecIng(fecIng);
+        
+        alumno.setEstado((camposAlu[index++]).charAt(0));
+        
+
         return alumno;
     }
     

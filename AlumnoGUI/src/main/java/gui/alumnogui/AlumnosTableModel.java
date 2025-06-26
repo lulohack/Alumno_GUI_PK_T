@@ -16,7 +16,7 @@ public class AlumnosTableModel extends AbstractTableModel {
     
     private static final int DNI_COL = 0;
     private static final int NAME_COL = 1;
-   // private static final int FEC_NAC_COL = 2;
+    // private static final int FEC_NAC_COL = 2;
     private static final int SURNAME_COL = 2;
     private static final int STATE_COL = 3;
     

@@ -388,6 +388,10 @@ public class AlumnoGUI extends javax.swing.JFrame {
     private void consultarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarButtonActionPerformed
         int selectedRow = alumnosTable.getSelectedRow();
         Alumno selectedAlu = alumnos.get(selectedRow);
+        if (selectedRow <0){
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado un Alumno","Error",JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         
         AluDialog aluDialog = new AluDialog(this, true, CrudAction.READ, selectedAlu);
         aluDialog.setVisible(true);

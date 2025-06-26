@@ -333,11 +333,16 @@ public class AluDialog extends javax.swing.JDialog {
 
     private void fillForm() {
         dniTextField.setText(String.valueOf(alu.getDni()));
-        apellidoTextField.setText(alu.getNombre());
+        apellidoTextField.setText(alu.getApellido());
+        nombreTextField.setText(alu.getNombre());
         
         int year = alu.getFecNac().getYear();
         int month = alu.getFecNac().getMonthValue()-1;
         int day = alu.getFecNac().getDayOfMonth();
+        
+        promedioTextField.setText(String.valueOf(alu.getPromedio()));
+        matAprTextField.setText(String.valueOf(alu.getMatApr()));
+        estadoTextField.setText(String.valueOf(alu.getEstado()));
         
         int year2 = alu.getFecIng().getYear();
         int month2 = alu.getFecIng().getMonthValue()-1;

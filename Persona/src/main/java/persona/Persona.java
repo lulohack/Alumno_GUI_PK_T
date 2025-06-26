@@ -101,7 +101,7 @@ public class Persona {
     @Override
     public String toString() {
         String nombreTrunc = nombre.length()>20?nombre.substring(0, 20):nombre;
-        return String.format("%08d%s%20s%s%20s%s%10s", dni, DELIM, nombreTrunc, DELIM, apellido,
+        return String.format("%08d%s%10s%s%10s%s%10s", dni, DELIM, nombreTrunc, DELIM, apellido,
                 DELIM, getFecNacStr());
     
         

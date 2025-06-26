@@ -34,12 +34,22 @@ public class TestDAO {
             DAOFactory factory = DAOFactory.getInstance();
             // DAOFactory factory2 = DAOFactory.getInstance();
             // DAOFactory factory3 = DAOFactory.getInstance();
-            
-            
+            /*
+            DAO dao = new AlumnoDAOTxt("alumnos.txt");
+            Alumno alu = null;
+            dao.create(alu);
+            */
             //String fullpath = "C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI";
+            
+            dao = new AlumnoDAOTxt("alumnos.txt");
+            Alumno alu = new Alumno();
+            alu.setDni(222);
+            alu.setNombre("ZACK");
+            alu.setApellido("ZIPK");
             
             //dao = new AlumnoDAOTxt("alumnos.txt");
             //dao = new AlumnoDAOSql(null, null, null);
+            
             String url = "jdbc:mysql://localhost:3306/caba";
             
             Map<String, String> config = new HashMap<>();
@@ -55,7 +65,7 @@ public class TestDAO {
             //config.put(DAOFactory.FULLPATH, fulllpath);
             
             dao = factory.buildDAO(config);
-            Alumno alu = new Alumno();
+            //Alumno alu = new Alumno();
             alu.setDni(111);
             alu.setNombre("Juan");
             alu.setApellido("Perez");
@@ -78,13 +88,14 @@ public class TestDAO {
             Logger.getLogger(TestDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
             ////////////////////
-        
+        /*
         try {
             Alumno aluRead = dao.read(12345678);
             System.out.println("Alumno leído OK: "+aluRead);
         } catch (DAOException ex) {
             Logger.getLogger(TestDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
         
         List<Alumno> alumnos;
         try {

@@ -1,13 +1,13 @@
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\ApellidoVacioException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\NombreNullException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\ApellidoNullException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\persona\Alumno.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\NombreVacioException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\MateriasAprobadasException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\persona\Persona.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\PersonaException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\PromedioNullException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\MateriasAprobadasNullException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\PromedioException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\PersonaDniException.java
-C:\Users\feder\OneDrive\Escritorio\TP ALUMNO GUI GITHUB\Alumno_GUI_PK_T\Persona\src\main\java\exceptions\EstadoException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\PersonaDniException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\ApellidoVacioException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\MateriasAprobadasNullException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\persona\Alumno.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\NombreNullException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\MateriasAprobadasException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\EstadoException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\PersonaException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\ApellidoNullException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\PromedioException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\persona\Persona.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\PromedioNullException.java
+C:\Users\lulohack\Desktop\TP_ALUMNO_GUI_PK_T\Persona\src\main\java\exceptions\NombreVacioException.java

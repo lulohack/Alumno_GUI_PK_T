@@ -11,6 +11,7 @@ import exceptions.PersonaException;
 import exceptions.PromedioException;
 import exceptions.PromedioNullException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -81,9 +82,19 @@ public class Alumno extends Persona {
         this.fecIng = fecIng;
     }
 
-    @Override
+   @Override
     public String toString() {
-        return super.toString() + String.format("", null, null); 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    return String.join("\t",
+        String.valueOf(getDni()),
+        getNombre(),
+        getApellido(),
+        getFecNac().format(formatter),
+        String.valueOf(promedio),
+        String.valueOf(MatApr),
+        fecIng.format(formatter),
+        String.valueOf(estado));
     }
     
     public static Alumno str2Alu(String[] camposAlu) throws PersonaException {
@@ -100,8 +111,7 @@ public class Alumno extends Persona {
         int month = Integer.parseInt(fecNacStr[1]);
         int day = Integer.parseInt(fecNacStr[0]);
         LocalDate fecNac = LocalDate.of(year,  month, day);
-        alumno.setFecNac(fecNac);
-        
+        alumno.setFecNac(fecNac);        
         alumno.setPromedio(Double.valueOf(camposAlu[index++]));
         alumno.setMatApr(Integer.valueOf(camposAlu[index++]));
         

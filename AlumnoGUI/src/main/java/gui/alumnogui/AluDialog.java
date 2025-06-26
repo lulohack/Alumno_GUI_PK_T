@@ -35,13 +35,27 @@ public class AluDialog extends javax.swing.JDialog {
             dniTextField.setEnabled(false);
             if (crudAction==CrudAction.READ) {
                 cancelButton.setVisible(false);
+                //Pregunto si se presiona el READ ponga en gris los campos
+                setCamposSoloLectura();
             }
             
             alu = selectedAlu;
-            fillForm();
+            fillForm();            
         }
     }
 
+    private void setCamposSoloLectura() {
+    nombreTextField.setEditable(false);
+    apellidoTextField.setEditable(false);
+    fecNacDateChooser.setEnabled(false);
+    promedioTextField.setEditable(false);
+    matAprTextField.setEditable(false);
+    fecIngDateChooser.setEnabled(false);
+    estadoTextField.setEditable(false);
+    okButton.setVisible(false); 
+}
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -113,6 +127,12 @@ public class AluDialog extends javax.swing.JDialog {
         jLabel7.setText("Fec. Ing.:");
 
         jLabel8.setText("Estado:");
+
+        promedioTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                promedioTextFieldActionPerformed(evt);
+            }
+        });
 
         matAprTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -230,18 +250,7 @@ public class AluDialog extends javax.swing.JDialog {
                 char estado = estadoTextField.getText().charAt(0);
                 alu.setEstado(estado);
                 //
-                //alu.setEstado(Character.valueOf(estadoTextField.getText()));
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+                //alu.setEstado(Character.valueOf(estadoTextField.getText()));             
                 
                 
             } catch (PersonaException ex) {
@@ -263,6 +272,10 @@ public class AluDialog extends javax.swing.JDialog {
     private void matAprTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matAprTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_matAprTextFieldActionPerformed
+
+    private void promedioTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_promedioTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_promedioTextFieldActionPerformed
 
     /**
      * @param args the command line arguments

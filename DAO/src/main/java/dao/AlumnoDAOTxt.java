@@ -43,7 +43,8 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
         
         try {
             raf.seek(raf.length()); // Se posicion al final del archivo
-            raf.writeBytes(alu.toString()+System.lineSeparator());
+            raf.writeBytes(alu.toString()+System.lineSeparator());//escribe lo que le pasamos
+            
         } catch (IOException ex) {
             Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException("Error al intentar crear el alumno ("+ex.getMessage()+")");
@@ -79,6 +80,7 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
             String lineaAlu;
             String[] camposAlu;
             while ((lineaAlu = raf.readLine())!=null) {
+                if (lineaAlu.trim().isEmpty()) continue;
                 camposAlu = lineaAlu.split(Persona.DELIM);
                 if (Integer.valueOf(camposAlu[0]).equals(dni) ) {
                     return Alumno.str2Alu(camposAlu);
@@ -168,6 +170,7 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
             String lineaAlu;
             String[] camposAlu;
             while ((lineaAlu = raf.readLine())!=null) {
+                if (lineaAlu.trim().isEmpty()) continue;
                 camposAlu = lineaAlu.split(Persona.DELIM);
                 if (Integer.valueOf(camposAlu[0]).equals(dni) ) {
                     return true;
@@ -187,16 +190,12 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
             raf.seek(0);
             String lineaAlu;
                 while ((lineaAlu = raf.readLine()) != null){
-                    //Alumno alumno = str2Alu(lineaAlu);
-                    Alumno alumno = str2Alu(lineaAlu.split(","));
-                    if (alumno.getEstado()== 'A'){
-                        alumnos.add(alumno);
+                    if (lineaAlu.trim().isEmpty()) continue;
+                    Alumno alumno = str2Alu(lineaAlu.split("\\t"));
+                    if (includeDeleted || alumno.getEstado() == 'A') {
+                    alumnos.add(alumno);
                     }
-                }
-                
-                /*
-                Alumno alu = str2Alu(new String[] {"1", "Juan", "Perez", "21/05/1950","5.0","20","14/02/1999","A"});
-                alumnos.add(alu);*/
+                }                
             } catch (IOException | PersonaException ex) {
                 Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
             }

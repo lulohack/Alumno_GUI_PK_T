@@ -366,10 +366,15 @@ public class AlumnoGUI extends javax.swing.JFrame {
     private void crearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearButtonActionPerformed
         AluDialog aluDialog = new AluDialog(this, true, CrudAction.CREATE, null);
         aluDialog.setVisible(true);
-        
+
         System.out.println("Se cerró el dialogo");
         Alumno alu = aluDialog.getAlu();
-        
+
+        if (alu == null) {
+            System.out.println("Creación cancelada por el usuario.");
+            return;
+        }
+
         try {
             dao.create(alu);
         } catch (DAOException ex) {

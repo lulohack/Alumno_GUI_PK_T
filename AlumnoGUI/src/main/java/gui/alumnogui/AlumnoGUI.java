@@ -242,7 +242,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
                     .addGroup(sqlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
                         .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(167, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -285,8 +285,8 @@ public class AlumnoGUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(txtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(sqlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(sqlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addComponent(incluirCheckBox)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -456,7 +456,25 @@ public class AlumnoGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_consultarButtonActionPerformed
 
     private void connSQLButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connSQLButtonActionPerformed
-        // TODO add your handling code here:
+                                        
+    try {
+        Map<String, String> config = new HashMap<>();
+        config.put(DAOFactory.TIPO_DAO, "TIPO_DAO_SQL");
+        config.put(DAOFactory.URL_SQL, "jdbc:mysql://localhost:3306/caba");  // Cambiá a tu DB
+
+        daoSQL = (AlumnoDAOSql) DAOFactory.getInstance().buildDAO(config);
+        dao = daoSQL;
+
+        alumnos = dao.findAll(false);
+        alumnosModel.setAlumnos(alumnos);
+        alumnosModel.fireTableDataChanged();
+
+        JOptionPane.showMessageDialog(this, "Conectado a la base de datos correctamente", "Conexión exitosa", JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (DAOFactoryException | DAOException ex) {
+        Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de conexión", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_connSQLButtonActionPerformed
 
     private void fullpathTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullpathTextFieldActionPerformed

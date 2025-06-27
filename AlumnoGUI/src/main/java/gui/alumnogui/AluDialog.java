@@ -37,8 +37,7 @@ public class AluDialog extends javax.swing.JDialog {
                 cancelButton.setVisible(false);
                 //Pregunto si se presiona el READ ponga en gris los campos
                 setCamposSoloLectura();
-            }
-            
+            }            
             alu = selectedAlu;
             fillForm();            
         }
@@ -226,39 +225,45 @@ public class AluDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        if (crudAction==CrudAction.CREATE) {
             try {
+            // solo crear nuevo Alumno si es modo CREATE esta linea la hizo fede
+            if (alu == null) {
                 alu = new Alumno();
+             }
+            // aseguramos siempre que el DNI esté bien cargado desde el campo (solo si está habilitado)
+             if (dniTextField.isEnabled()) {
                 alu.setDni(Integer.valueOf(dniTextField.getText()));
-                alu.setNombre(nombreTextField.getText());
-                alu.setApellido(apellidoTextField.getText());
-                
-                int year = fecNacDateChooser.getCalendar().get(Calendar.YEAR);
-                int month = fecNacDateChooser.getCalendar().get(Calendar.MONTH)+1;
-                int dayOfMonth = fecNacDateChooser.getCalendar().get(Calendar.DAY_OF_MONTH);
-                alu.setFecNac(LocalDate.of(year, month, dayOfMonth));
-                
-                alu.setPromedio(Double.valueOf(promedioTextField.getText()));
-                alu.setMatApr(Integer.valueOf(matAprTextField.getText()));
+             }
             
-                
-                int year2 = fecIngDateChooser.getCalendar().get(Calendar.YEAR);
-                int month2 = fecIngDateChooser.getCalendar().get(Calendar.MONTH)+1;
-                int dayOfMonth2 = fecIngDateChooser.getCalendar().get(Calendar.DAY_OF_MONTH);
-                alu.setFecIng(LocalDate.of(year2, month2, dayOfMonth2));
-                //sugerido por chatgpt
-                char estado = estadoTextField.getText().charAt(0);
-                alu.setEstado(estado);
-                //
-                //alu.setEstado(Character.valueOf(estadoTextField.getText()));             
-                
-                
-            } catch (PersonaException ex) {
-                Logger.getLogger(AluDialog.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+
+            //actualizar los datos comunes en ambos casos: CREATE y UPDATE
+            alu.setNombre(nombreTextField.getText());
+            alu.setApellido(apellidoTextField.getText());
+
+            int year = fecNacDateChooser.getCalendar().get(Calendar.YEAR);
+            int month = fecNacDateChooser.getCalendar().get(Calendar.MONTH) + 1;
+            int day = fecNacDateChooser.getCalendar().get(Calendar.DAY_OF_MONTH);
+            alu.setFecNac(LocalDate.of(year, month, day));
+
+            alu.setPromedio(Double.valueOf(promedioTextField.getText()));
+            alu.setMatApr(Integer.valueOf(matAprTextField.getText()));
+
+            int year2 = fecIngDateChooser.getCalendar().get(Calendar.YEAR);
+            int month2 = fecIngDateChooser.getCalendar().get(Calendar.MONTH) + 1;
+            int day2 = fecIngDateChooser.getCalendar().get(Calendar.DAY_OF_MONTH);
+            alu.setFecIng(LocalDate.of(year2, month2, day2));
+
+            char estado = estadoTextField.getText().charAt(0);
+            //cambia a M si es modificación
+            alu.setEstado(crudAction == CrudAction.UPDATE ? 'M' : estado); //cambia a M si es modificación
+
+
+        } catch (PersonaException ex) {
+            Logger.getLogger(AluDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        setVisible(false);
+        //cerrar el formulario después de guardar cambios
+        setVisible(false); 
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void nombreTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreTextFieldActionPerformed

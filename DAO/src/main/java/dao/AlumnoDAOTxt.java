@@ -97,44 +97,33 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
         return null;
     }
 
-    @Override
+    @Override    
     public void update(Alumno alu) throws DAOException {
         try {
-            /*
-            long filePointer=0;
-            raf.seek(filePointer);
-            String lineaAlu;
-            Integer dniAlu;
-            while ((lineaAlu = raf.readLine())!=null) {
-                dniAlu = Integer.valueOf(lineaAlu.substirng(0,8));
-                if (dniAlu.equals(alu.getDni) ) {
-                    raf.seek(filePointer);
-                    raf.writeBytes(alu.toString());;
-                    return;
-                }
-                filePointer = raf.getFilePointer();
-            } catch (IOException ex) {
-            Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOException("Error de E/S ("+ex.getMessage()+")");
-            }
-            */
+            List<Alumno> todos = findAll(true); //  obtener todos los alumnos
+            boolean encontrado = false;
 
-            raf.seek(0);
-            String lineaAlu;
-            String[] camposAlu;
-            while ((lineaAlu = raf.readLine())!=null) {
-                camposAlu = lineaAlu.split(Persona.DELIM);
-                if (Integer.valueOf(camposAlu[0]).equals(alu.getDni()) ) {
-                    // lo encontré
-                    // habría que reposicionarse (ver el uso de raf.getFilePointer())
-                    // raf.seek(filePointer);
-                    raf.writeBytes(alu.toString());
+            List<Alumno> actualizados = new ArrayList<>();
+            for (Alumno a : todos) {
+
+                if (String.valueOf(a.getDni()).trim().equals(String.valueOf(alu.getDni()).trim())) {
+                    actualizados.add(alu);
+                    encontrado = true;
+                } else {
+                    actualizados.add(a);
                 }
-                //filePointer = raf.getFilePointer();
+            }
+            if (!encontrado) {
+                throw new DAOException("Alumno con DNI " + alu.getDni() + " no encontrado para modificar.");
+            }
+
+            raf.setLength(0);
+            for (Alumno a : actualizados) {
+                raf.writeBytes(a.toString() + "\n");
             }
         } catch (IOException ex) {
             Logger.getLogger(AlumnoDAOTxt.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOException("Error de E/S ("+ex.getMessage()+")");
+            throw new DAOException("Error de E/S (" + ex.getMessage() + ")");
         }
     }
 
@@ -192,7 +181,7 @@ public class AlumnoDAOTxt extends DAO<Alumno, Integer> {
                 while ((lineaAlu = raf.readLine()) != null){
                     if (lineaAlu.trim().isEmpty()) continue;
                     Alumno alumno = str2Alu(lineaAlu.split("\\t"));
-                    if (includeDeleted || alumno.getEstado() == 'A') {
+                    if (includeDeleted || alumno.getEstado() == 'A' || alumno.getEstado() == 'M') {
                     alumnos.add(alumno);
                     }
                 }                

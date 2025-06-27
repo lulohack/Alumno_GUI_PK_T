@@ -22,6 +22,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableModel;
 import persona.Alumno;
+import exceptions.EstadoException;
 
 /**
  *
@@ -61,7 +62,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
         alumnosTable = new javax.swing.JTable();
         crearButton = new javax.swing.JButton();
         modificarButton = new javax.swing.JButton();
-        modificarButton1 = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
         consultarButton = new javax.swing.JButton();
         incluirCheckBox = new javax.swing.JCheckBox();
         txtPanel = new javax.swing.JPanel();
@@ -108,10 +109,10 @@ public class AlumnoGUI extends javax.swing.JFrame {
             }
         });
 
-        modificarButton1.setText("Eliminar");
-        modificarButton1.addActionListener(new java.awt.event.ActionListener() {
+        deleteButton.setText("Eliminar");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                modificarButton1ActionPerformed(evt);
+                deleteButtonActionPerformed(evt);
             }
         });
 
@@ -123,6 +124,11 @@ public class AlumnoGUI extends javax.swing.JFrame {
         });
 
         incluirCheckBox.setText("Incluir Eliminados");
+        incluirCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                incluirCheckBoxActionPerformed(evt);
+            }
+        });
 
         txtPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -236,7 +242,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
                     .addGroup(sqlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
                         .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(167, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -256,7 +262,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(crearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(modificarButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
-                            .addComponent(modificarButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                            .addComponent(deleteButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
                             .addComponent(consultarButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))
                         .addGap(6, 6, 6))
                     .addGroup(layout.createSequentialGroup()
@@ -282,20 +288,20 @@ public class AlumnoGUI extends javax.swing.JFrame {
                 .addComponent(sqlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(incluirCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addComponent(crearButton)
                         .addGap(18, 18, 18)
                         .addComponent(modificarButton)
                         .addGap(18, 18, 18)
-                        .addComponent(modificarButton1)
+                        .addComponent(deleteButton)
                         .addGap(18, 18, 18)
-                        .addComponent(consultarButton)
-                        .addGap(63, 63, 63))))
+                        .addComponent(consultarButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(37, 37, 37))
         );
 
         pack();
@@ -330,8 +336,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
         int resp = fileChooser.showOpenDialog(this);
         if (resp!=JFileChooser.APPROVE_OPTION) {
             return;
-        }
-        
+        }        
         fullpathTextField.setText(fileChooser.getSelectedFile().getAbsolutePath());
         try {
             Map<String, String> config = new HashMap<>();
@@ -340,7 +345,8 @@ public class AlumnoGUI extends javax.swing.JFrame {
             daoTXT = (AlumnoDAOTxt) DAOFactory.getInstance().buildDAO(config);
             dao = daoTXT;
             
-            alumnos = dao.findAll(true);
+            alumnos = dao.findAll(false);            
+            //alumnos = dao.findAll(incluirCheckBoxActionPerformed.isSelected());
             alumnosModel.setAlumnos(alumnos);
             alumnosModel.fireTableDataChanged();
         } catch (DAOException | DAOFactoryException ex) {
@@ -349,19 +355,28 @@ public class AlumnoGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_chooserButtonActionPerformed
 
-    private void modificarButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarButton1ActionPerformed
-        // Mensaje de confirmación
-        //JOptionPane.showConfirmDialog(repoComboBox, evt, title, WIDTH, HEIGHT);
-        
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int selectedRow = alumnosTable.getSelectedRow();
-        Integer dniAlu = alumnos.get(selectedRow).getDni();
-        try {
-            dao.delete(dniAlu);
-        } catch (DAOException ex) {
-            Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
-            
+        if (selectedRow < 0) {
+             JOptionPane.showMessageDialog(this, "Debe seleccionar un alumno para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+             return;
         }
-    }//GEN-LAST:event_modificarButton1ActionPerformed
+         int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea dar de baja al alumno?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+         if (confirm != JOptionPane.YES_OPTION) {
+             return;
+         }
+         int modelRow = alumnosTable.convertRowIndexToModel(selectedRow);
+         Alumno alumnoSeleccionado = alumnos.get(modelRow);
+         try {
+            alumnoSeleccionado.setEstado('B');
+            dao.update(alumnoSeleccionado);
+            actualizarTabla();
+            JOptionPane.showMessageDialog(this, "Alumno dado de baja correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DAOException | EstadoException ex) {
+            Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al dar de baja al alumno:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void crearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearButtonActionPerformed
         AluDialog aluDialog = new AluDialog(this, true, CrudAction.CREATE, null);
@@ -377,17 +392,54 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
         try {
             dao.create(alu);
+            //actualiza despues de creear
+            actualizarTabla();
         } catch (DAOException ex) {
             Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_crearButtonActionPerformed
-
+    private void actualizarTabla() {
+        try {
+            alumnos = dao.findAll(true); 
+            // Reutilizás el mismo modelo
+            alumnosModel.setAlumnos(alumnos); 
+            alumnosModel.fireTableDataChanged();
+        } catch (DAOException ex) {
+            Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al actualizar la tabla:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void modificarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarButtonActionPerformed
-        AluDialog aluDialog = new AluDialog(this, true, CrudAction.UPDATE, null);
-        aluDialog.setVisible(true);
-        
-        
-        
+            
+        int selectedRow = alumnosTable.getSelectedRow();
+    if (selectedRow < 0) {
+        JOptionPane.showMessageDialog(this, "Debe seleccionar un alumno para modificar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    // Obtengooo el alumno seleccionadooo
+    //Alumno alumnoSeleccionado = alumnos.get(selectedRow);
+    // convierte índice de la vista al modelo real
+     int modelRow = alumnosTable.convertRowIndexToModel(selectedRow); 
+     // obtiene el alumno desde la lista real según el índice convertido
+     Alumno alumnoSeleccionado = alumnos.get(modelRow); 
+    // abro el diálogo en modo UPDATE, con ese alumno
+    AluDialog aluDialog = new AluDialog(this, true, CrudAction.UPDATE, alumnoSeleccionado);
+    aluDialog.setVisible(true);
+    // Obtener el alumno actualizado desde el diálogo
+    Alumno alumnoModificado = aluDialog.getAlu();
+    if (alumnoModificado == null) {
+        System.out.println("Modificación cancelada por el usuario.");
+        return;
+    }
+    try {
+        dao.update(alumnoModificado);
+        // refrescar tabla
+        actualizarTabla(); 
+        JOptionPane.showMessageDialog(this, "Alumno modificado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    } catch (DAOException ex) {
+        Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, "Error al modificar el alumno:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }        
     }//GEN-LAST:event_modificarButtonActionPerformed
 
     private void consultarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarButtonActionPerformed
@@ -410,6 +462,17 @@ public class AlumnoGUI extends javax.swing.JFrame {
     private void fullpathTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullpathTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fullpathTextFieldActionPerformed
+
+    private void incluirCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_incluirCheckBoxActionPerformed
+         try {
+        alumnos = dao.findAll(incluirCheckBox.isSelected());
+        alumnosModel.setAlumnos(alumnos);
+        alumnosModel.fireTableDataChanged();
+    } catch (DAOException ex) {
+        Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, "Error al recargar alumnos", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_incluirCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -452,6 +515,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
     private javax.swing.JButton connSQLButton;
     private javax.swing.JButton consultarButton;
     private javax.swing.JButton crearButton;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JTextField fullpathTextField;
     private javax.swing.JCheckBox incluirCheckBox;
     private javax.swing.JLabel jLabel1;
@@ -461,7 +525,6 @@ public class AlumnoGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton modificarButton;
-    private javax.swing.JButton modificarButton1;
     private javax.swing.JTextField pwdTextField;
     private javax.swing.JComboBox<String> repoComboBox;
     private javax.swing.JPanel sqlPanel;

@@ -17,4 +17,7 @@ public class EstadoException extends PersonaException{
     public EstadoException(String message) {
         super(message);
     }
+    
+   
+    
 }

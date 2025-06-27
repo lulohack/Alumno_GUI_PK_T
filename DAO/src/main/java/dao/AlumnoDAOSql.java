@@ -6,6 +6,7 @@ package dao;
 
 import exceptions.PersonaException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -91,7 +92,8 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
             prepareStatementCreate.setDouble(++index, alu.getPromedio());
             prepareStatementCreate.setInt(++index, alu.getMatApr());
             prepareStatementCreate.setDate(++index, DateUtils.localeDate2SqlDate(alu.getFecIng()));
-            prepareStatementCreate.setInt(++index, alu.getEstado());
+            //siempre se debe crear con estado A
+            prepareStatementCreate.setString(++index, "A");;
             
             prepareStatementCreate.execute();
             
@@ -136,29 +138,78 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
     }
 
     private Alumno buildAlumnoFromDB(ResultSet rs) throws PersonaException, SQLException {
-        Alumno alu = new Alumno();
-        alu.setDni(rs.getInt("DNI"));
-        alu.setNombre(rs.getString("NOMBRE"));
-        alu.setApellido(rs.getString("APELLIDO"));
-        alu.setFecNac(rs.getDate("FEC_NAC").toLocalDate());
-        return alu;
+    Alumno alu = new Alumno();
+    alu.setDni(rs.getInt("DNI"));
+    alu.setNombre(rs.getString("NOMBRE"));
+    alu.setApellido(rs.getString("APELLIDO"));
+
+    Date fecNacSql = rs.getDate("FEC_NAC");
+    if (fecNacSql != null) {
+        alu.setFecNac(fecNacSql.toLocalDate());
     }
+
+    alu.setPromedio(rs.getDouble("PROMEDIO"));
+    alu.setMatApr(rs.getInt("MAT_APR"));
+
+    Date fecIngSql = rs.getDate("FEC_ING");
+    if (fecIngSql != null) {
+        alu.setFecIng(fecIngSql.toLocalDate());
+    }
+
+    alu.setEstado(rs.getString("ESTADO").charAt(0)); // 'A', 'B', 'M'
+
+    return alu;
+}
 
     @Override
     public void update(Alumno alumno) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            String sql = "UPDATE alumnos SET " +
+                         "NOMBRE = ?, " +
+                         "APELLIDO = ?, " +
+                         "FEC_NAC = ?, " +
+                         "PROMEDIO = ?, " +
+                         "MAT_APR = ?, " +
+                         "FEC_ING = ?, " +
+                         "ESTADO = ? " +
+                         "WHERE DNI = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            int index = 0;
+            ps.setString(++index, alumno.getNombre());
+            ps.setString(++index, alumno.getApellido());
+            ps.setDate(++index, DateUtils.localeDate2SqlDate(alumno.getFecNac()));
+            ps.setDouble(++index, alumno.getPromedio());
+            ps.setInt(++index, alumno.getMatApr());
+            ps.setDate(++index, DateUtils.localeDate2SqlDate(alumno.getFecIng()));
+            ps.setString(++index, alumno.getEstado() + "");
+            ps.setInt(++index, alumno.getDni());
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DAOException("No se encontró el alumno con DNI: " + alumno.getDni());
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AlumnoDAOSql.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al actualizar alumno: " + ex.getMessage());
+        }
     }
 
     @Override
     public void delete(Integer dni) throws DAOException {
-        try {
-            prepareStatementDelete.setInt(1, dni);
-             int affectedRows=prepareStatementDelete.executeUpdate();
-        if (affectedRows==0) {
-            throw new DAOException("No se pudo encontrar el alumno con DNI: "+dni);
+        // Baja lógica
+        Alumno alu = read(dni); // Obtenemos el alumno
+        if (alu == null) {
+            throw new DAOException("No se encontró el alumno con DNI: " + dni);
         }
-        } catch (SQLException ex) {
+
+        try {
+            alu.setEstado('B'); // Marcamos como dado de baja
+            update(alu);        // Guardamos el cambio en la base
+        } catch (PersonaException ex) {
             Logger.getLogger(AlumnoDAOSql.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al marcar como eliminado: " + ex.getMessage());
         }
     }
 
@@ -181,23 +232,24 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
     @Override
     public List<Alumno> findAll(boolean includeDeleted) throws DAOException {
         List<Alumno> alumnos = new ArrayList<>();
-        try {
-            ResultSet rs = prepareStatementAll.executeQuery();
+        String sql = includeDeleted
+            ? "SELECT * FROM alumnos"
+            : "SELECT * FROM alumnos WHERE ESTADO IN ('A', 'M')";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 alumnos.add(buildAlumnoFromDB(rs));
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(AlumnoDAOSql.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOException("Error de SQL ("+ex.getMessage()+")");
-        } catch (PersonaException ex) {
-            Logger.getLogger(AlumnoDAOSql.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOException("Error al setear datos del alumno ("+ex.getMessage()+")");
-        }
-        
-        return alumnos;
-        
-    }
 
+        } catch (SQLException | PersonaException ex) {
+            Logger.getLogger(AlumnoDAOSql.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al listar alumnos: " + ex.getMessage());
+        }
+
+        return alumnos;
+    }
     @Override
     public void close() throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

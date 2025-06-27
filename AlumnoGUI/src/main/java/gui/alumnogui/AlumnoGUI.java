@@ -185,15 +185,30 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
         jLabel3.setText("URL:");
 
-        urlTextField.setText("jdbc:mysql://localhost:3306/caba");
+        urlTextField.setText("jdbc:mysql://localhost:3306/alumnos");
+        urlTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                urlTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("User:");
 
-        userTextField.setText("root");
+        userTextField.setText("caba");
+        userTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Clave:");
 
         pwdTextField.setText("root");
+        pwdTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pwdTextFieldActionPerformed(evt);
+            }
+        });
 
         connSQLButton.setText("Conectar");
         connSQLButton.addActionListener(new java.awt.event.ActionListener() {
@@ -330,7 +345,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_repoComboBoxActionPerformed
 
     private void chooserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooserButtonActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
+          JFileChooser fileChooser = new JFileChooser();
         FileFilter filter = new FileNameExtensionFilter(null, "txt", "json");
         fileChooser.setFileFilter(filter);
         int resp = fileChooser.showOpenDialog(this);
@@ -457,24 +472,26 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
     private void connSQLButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connSQLButtonActionPerformed
                                         
-    try {
-        Map<String, String> config = new HashMap<>();
-        config.put(DAOFactory.TIPO_DAO, "TIPO_DAO_SQL");
-        config.put(DAOFactory.URL_SQL, "jdbc:mysql://localhost:3306/caba");  // Cambiá a tu DB
+        try {
+            Map<String, String> config = new HashMap<>();
+            config.put(DAOFactory.TIPO_DAO, "TIPO_DAO_SQL");
+            config.put(DAOFactory.URL_SQL, "jdbc:mysql://localhost:3306/alumnos");
+            config.put(DAOFactory.USER_SQL, userTextField.getText());
+            config.put(DAOFactory.PASS_SQL, pwdTextField.getText());
 
-        daoSQL = (AlumnoDAOSql) DAOFactory.getInstance().buildDAO(config);
-        dao = daoSQL;
+            daoSQL = (AlumnoDAOSql) DAOFactory.getInstance().buildDAO(config);
+            dao = daoSQL;
 
-        alumnos = dao.findAll(false);
-        alumnosModel.setAlumnos(alumnos);
-        alumnosModel.fireTableDataChanged();
+            alumnos = dao.findAll(false);
+            alumnosModel.setAlumnos(alumnos);
+            alumnosModel.fireTableDataChanged();
 
-        JOptionPane.showMessageDialog(this, "Conectado a la base de datos correctamente", "Conexión exitosa", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Conectado a la base de datos correctamente", "Conexión exitosa", JOptionPane.INFORMATION_MESSAGE);
 
-    } catch (DAOFactoryException | DAOException ex) {
-        Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
-        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de conexión", JOptionPane.ERROR_MESSAGE);
-    }
+        } catch (DAOFactoryException | DAOException ex) {
+            Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de conexión", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_connSQLButtonActionPerformed
 
     private void fullpathTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullpathTextFieldActionPerformed
@@ -491,6 +508,18 @@ public class AlumnoGUI extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Error al recargar alumnos", "Error", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_incluirCheckBoxActionPerformed
+
+    private void urlTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_urlTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_urlTextFieldActionPerformed
+
+    private void userTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userTextFieldActionPerformed
+
+    private void pwdTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwdTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pwdTextFieldActionPerformed
 
     /**
      * @param args the command line arguments

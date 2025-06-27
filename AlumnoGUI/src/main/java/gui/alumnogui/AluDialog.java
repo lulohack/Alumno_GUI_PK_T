@@ -51,7 +51,9 @@ public class AluDialog extends javax.swing.JDialog {
     matAprTextField.setEditable(false);
     fecIngDateChooser.setEnabled(false);
     estadoTextField.setEditable(false);
-    okButton.setVisible(false); 
+    okButton.setVisible(false);
+    estadoTextField.setVisible(false);
+
 }
     
     
@@ -130,6 +132,13 @@ public class AluDialog extends javax.swing.JDialog {
         promedioTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 promedioTextFieldActionPerformed(evt);
+            }
+        });
+
+        estadoTextField.setEditable(false);
+        estadoTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                estadoTextFieldActionPerformed(evt);
             }
         });
 
@@ -281,6 +290,10 @@ public class AluDialog extends javax.swing.JDialog {
     private void promedioTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_promedioTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_promedioTextFieldActionPerformed
+
+    private void estadoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estadoTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_estadoTextFieldActionPerformed
 
     /**
      * @param args the command line arguments

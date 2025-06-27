@@ -20,6 +20,8 @@ public class DAOFactory {
     public static final String TIPO_DAO = "TIPO_DAO";
     public static final String FULLPATH = "FULLPATH";
     public static final String URL_SQL = "URL_SQL";
+    public static final String USER_SQL = "USER_SQL";
+    public static final String PASS_SQL = "PASS_SQL";
     
     private DAOFactory() {
         
@@ -49,7 +51,9 @@ public class DAOFactory {
             {
                 try {
                     String url = config.get(URL_SQL);
-                    return new AlumnoDAOSql(url, "root", "root");
+                    String user = config.get(USER_SQL);
+                    String pass = config.get(PASS_SQL);
+                    return new AlumnoDAOSql(url, user, pass);
                 } catch (DAOException ex) {
                     Logger.getLogger(DAOFactory.class.getName()).log(Level.SEVERE, null, ex);
                     throw new DAOFactoryException("Error en la factory ("+ex.getMessage()+")");

@@ -27,9 +27,9 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
     private PreparedStatement prepareStatementCreate;
     private PreparedStatement prepareStatementRead;
     private PreparedStatement prepareStatementAll;
-    // private PreparedStatement prepareStatementuUpdate;
-    // private PreparedStatement prepareStatementuDelete;
-    // private PreparedStatement prepareStatementuExist;
+    private PreparedStatement prepareStatementUpdate;
+    private PreparedStatement prepareStatementDelete;
+    private PreparedStatement prepareStatementExist;
             
     AlumnoDAOSql(String url, String user, String pwd) throws DAOException {
         try {
@@ -39,15 +39,17 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
                                 "(DNI,\n" +
                                 "NOMBRE,\n" +
                                 "APELLIDO,\n" +
-                                "FEC_NAC)\n" +
-                                /*
-                                "PROMEDIO)\n" +
-                                "MAT_APR)\n" +
-                                "FEC_ING)\n" +
+                                "FEC_NAC,\n" +
+                                "PROMEDIO,\n" +
+                                "MAT_APR,\n" +
+                                "FEC_ING,\n" +
                                 "ESTADO)\n" +
-                                */
                                 "VALUES\n" +
                                 "(?,\n" +
+                                "?,\n" +
+                                "?,\n" +
+                                "?,\n" +
+                                "?,\n" +
                                 "?,\n" +
                                 "?,\n" +
                                 "?);";
@@ -59,7 +61,7 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
             String sqlAll = "SELECT * FROM alumnos";
             prepareStatementAll = conn.prepareStatement(sqlAll);
             
-            /*
+            // Agregado
             String sqlUpdate = "SELECT * FROM alumnos WHERE DNI = ?";
             prepareStatementUpdate = conn.prepareStatement(sqlUpdate);
             
@@ -68,12 +70,7 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
             
             String sqlExist = "SELECT * FROM alumnos WHERE DNI = ?";
             prepareStatementExist = conn.prepareStatement(sqlExist);
-
-            String sql = "SELECT * FROM alumnos";
-            prepareStatement = conn.prepareStatement(sql);
-            
-            */
-            
+           
         } catch (SQLException ex) {
             Logger.getLogger(AlumnoDAOSql.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException("Error de SQL ("+ex.getMessage()+")");
@@ -90,10 +87,11 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
             prepareStatementCreate.setString(++index, alu.getApellido());
             prepareStatementCreate.setDate(++index, DateUtils.localeDate2SqlDate(alu.getFecNac()));
             
-            //prepareStatementCreate.setInt(++index, alu.getPromedio());
-            //prepareStatementCreate.setInt(++index, alu.getMatApr());
-            //prepareStatementCreate.setDate(++index, DateUtils.localeDate2SqlDate(alu.getFecIng()));
-            //prepareStatementCreate.setInt(++index, alu.getEstado());
+            // Agregado
+            prepareStatementCreate.setDouble(++index, alu.getPromedio());
+            prepareStatementCreate.setInt(++index, alu.getMatApr());
+            prepareStatementCreate.setDate(++index, DateUtils.localeDate2SqlDate(alu.getFecIng()));
+            prepareStatementCreate.setInt(++index, alu.getEstado());
             
             prepareStatementCreate.execute();
             
@@ -110,18 +108,19 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
             ResultSet rs = prepareStatementRead.executeQuery();
             if (rs.next()) {
                 
+                // Agregado, problema con char y date
                 /*
                 Alumno alumno= new Alumno();
                 alumno.setDni(rs.getInt("DNI"));
                 alumno.setNombre(rs.getString("NOMBRE"));
                 alumno.setApellido(rs.getString("APELLIDO"));
-                alumno.setDni(rs.getInt("DNI"));
-                alumno.setDni(rs.getInt("DNI"));
-                alumno.setDni(rs.getInt("MAT_APR"));
-                alumno.setDni(rs.getInt("DNI"));
-                alumno.setEstado(rs.getInt("Estado"));
-                
+                alumno.setFecNac(DateUtils.localeDate2SqlDate(rs.getDateChooser("FEC_NAC"));
+                alumno.setPromedio(rs.getDouble("PROMEDIO"));
+                alumno.setMatApr(rs.getInt("MAT_APR"));
+                alumno.setFecIng(DateUtils.localeDate2SqlDate(rs.getDateChooser("FEC_ING"));
+                alumno.setEstado(rs.getChar("ESTADO"));
                 */
+               
                 
                 return buildAlumnoFromDB(rs);
             }
@@ -151,14 +150,32 @@ public class AlumnoDAOSql extends DAO<Alumno, Integer> {
     }
 
     @Override
-    public void delete(Integer id) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void delete(Integer dni) throws DAOException {
+        try {
+            prepareStatementDelete.setInt(1, dni);
+             int affectedRows=prepareStatementDelete.executeUpdate();
+        if (affectedRows==0) {
+            throw new DAOException("No se pudo encontrar el alumno con DNI: "+dni);
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(AlumnoDAOSql.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
-    public boolean exist(Integer id) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        // alu.setNombre(rs.getString("APELIIDO"));
+    public boolean exist(Integer dni) throws DAOException {
+        try {
+            prepareStatementExist.setInt(1, dni);
+             ResultSet rs=prepareStatementExist.executeQuery();
+        if (rs.next()) {
+            int count = rs.getInt("count");
+            return count >0;
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(AlumnoDAOSql.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al verificar la existencia del alumno: "+dni);
+        }
+        return false;
     }
 
     @Override
